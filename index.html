@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KS Esports - The Ultimate Esports Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Oxanium:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ==== GLOBAL STYLES ==== */
+        :root {
+            --black: #0a0a0a;
+            --dark-black: #000000;
+            --red: #FF0000;
+            --dark-red: #8B0000;
+            --light-red: #FF3333;
+            --neon-red: #FF073A;
+            --white: #FFFFFF;
+            --gray: #1E1E1E;
+            --light-gray: #2E2E2E;
+            --dark-gray: #121212;
+            --gold: #FFD700;
+            --text-glow: 0 0 10px rgba(255, 0, 0, 0.7), 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Oxanium', 'Orbitron', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--black);
+            color: var(--white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* ==== LOADING ANIMATION ==== */
+        .loader-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--black);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loader-wrapper.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loader {
+            width: 100px;
+            height: 100px;
+            border: 5px solid transparent;
+            border-top-color: var(--red);
+            border-bottom-color: var(--red);
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+            position: relative;
+        }
+        
+        .loader::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 5px solid transparent;
+            border-top-color: var(--light-red);
+            border-bottom-color: var(--light-red);
+            border-radius: 50%;
+            animation: spin 2s linear infinite reverse;
+        }
+        
+        .loader-text {
+            margin-top: 30px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: var(--text-glow);
+            animation: pulse 1.5s infinite alternate;
+        }
+        
+        /* ==== ANIMATIONS ==== */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.5; text-shadow: 0 0 5px rgba(255, 0, 0, 0.5); }
+            100% { opacity: 1; text-shadow: 0 0 15px rgba(255, 0, 0, 0.8); }
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 5px rgba(255, 0, 0, 0.5); }
+            50% { text-shadow: 0 0 15px rgba(255, 0, 0, 0.8); }
+            100% { text-shadow: 0 0 5px rgba(255, 0, 0, 0.5); }
+        }
+        
+        @keyframes borderGlow {
+            0% { box-shadow: 0 0 5px rgba(255, 0, 0, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.7); }
+            100% { box-shadow: 0 0 5px rgba(255, 0, 0, 0.3); }
+        }
+        
+        /* ==== UTILITY CLASSES ==== */
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .section {
+            padding: 100px 0;
+            position: relative;
+        }
+        
+        .section-title {
+            font-size: 3rem;
+            margin-bottom: 50px;
+            text-align: center;
+            position: relative;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: var(--text-glow);
+            animation: textGlow 2s infinite;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--red), var(--dark-red));
+            border-radius: 3px;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            background: linear-gradient(45deg, var(--red), var(--dark-red));
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            animation: borderGlow 3s infinite;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 0, 0, 0.6);
+            background: linear-gradient(45deg, var(--light-red), var(--red));
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--red);
+            color: var(--white);
+            animation: none;
+        }
+        
+        .btn-outline:hover {
+            background: var(--red);
+        }
+        
+        /* ==== HEADER ==== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 25px 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            background-color: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--red);
+            box-shadow: 0 5px 30px rgba(255, 0, 0, 0.2);
+        }
+        
+        header.scrolled {
+            padding: 15px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);
+            background-color: rgba(0, 0, 0, 0.98);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 50px;
+            width: auto;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 5px rgba(255, 0, 0, 0.7));
+        }
+        
+        .logo:hover img {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.9));
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 35px;
+            position: relative;
+        }
+        
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 5px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--red);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 5px var(--red);
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .nav-links a:hover {
+            color: var(--red);
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.8rem;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-menu-btn:hover {
+            color: var(--red);
+            transform: scale(1.1);
+        }
+        
+        /* ==== HERO SECTION ==== */
+        .hero {
+            height: 100vh;
+            min-height: 800px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 1s ease-out;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.8), 0 0 10px rgba(255, 0, 0, 0.7);
+            line-height: 1.2;
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+            animation: textGlow 2s infinite;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+            opacity: 0.9;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+        
+/* ==== SCREENSHOTS SECTION ==== */
+.screenshots {
+    background-color: var(--dark-black);
+    position: relative;
+    overflow: hidden;
+    padding: 80px 0;
+}
+
+.screenshots::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+    opacity: 0.05;
+    z-index: 0;
+}
+
+.screenshots-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 25px;
+    margin-top: 60px;
+    position: relative;
+    z-index: 1;
+    justify-items: center;
+}
+
+.screenshot-item {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    aspect-ratio: 9/16; /* Portrait aspect ratio */
+    width: 200px; /* Fixed width for vertical screenshots */
+    border: 2px solid var(--gray);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.screenshot-item:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 20px 40px rgba(255, 0, 0, 0.4);
+    border-color: var(--red);
+    z-index: 2;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+    .screenshots-container {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 30px;
+    }
+    .screenshot-item {
+        width: 220px;
+    }
+}
+
+@media (min-width: 992px) {
+    .screenshots-container {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+    .screenshot-item {
+        width: 240px;
+    }
+}
+        /* ==== GAME MODES SECTION ==== */
+        .game-modes {
+            background-color: var(--dark-black);
+            position: relative;
+            overflow: hidden;
+            padding: 100px 0;
+        }
+        
+        .game-modes::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            opacity: 0.05;
+            z-index: 0;
+        }
+        
+        .game-modes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .game-mode-card {
+            background: linear-gradient(145deg, var(--gray), var(--dark-black));
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.5s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .game-mode-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 0, 0, 0.3);
+            border-color: var(--red);
+        }
+        
+        .game-mode-image {
+            height: 200px;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .game-mode-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.8));
+        }
+        
+        .game-mode-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--red);
+            color: var(--white);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            z-index: 1;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+        
+        .game-mode-content {
+            padding: 25px;
+            position: relative;
+        }
+        
+        .game-mode-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--white);
+            text-transform: uppercase;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .game-mode-type {
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .game-mode-desc {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .game-mode-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+        
+        .game-mode-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+        }
+        
+        .mode-btn {
+            padding: 12px;
+            background-color: var(--light-gray);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            font-size: 0.8rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .mode-btn:hover {
+            background-color: var(--red);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+        
+        /* ==== TOURNAMENTS SECTION ==== */
+        .tournaments {
+            background-color: var(--black);
+            position: relative;
+            overflow: hidden;
+            padding: 100px 0;
+        }
+        
+        .tournaments::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            opacity: 0.05;
+            z-index: 0;
+        }
+        
+        .tournament-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tournament-card {
+            background: linear-gradient(145deg, var(--gray), var(--dark-black));
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.5s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .tournament-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 0, 0, 0.3);
+            border-color: var(--red);
+        }
+        
+        .tournament-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .tournament-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.8));
+        }
+        
+        .tournament-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--red);
+            color: var(--white);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            z-index: 1;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+        
+        .tournament-content {
+            padding: 25px;
+            position: relative;
+        }
+        
+        .tournament-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--white);
+            text-transform: uppercase;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .tournament-prize {
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .tournament-desc {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .tournament-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+        
+        /* ==== RESULTS SECTION ==== */
+        .results {
+            background-color: var(--black);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .results::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            opacity: 0.05;
+            z-index: 0;
+        }
+        
+        .results-list {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .result-item {
+            background: linear-gradient(145deg, var(--gray), var(--dark-black));
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--red);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .result-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 25px rgba(255, 0, 0, 0.2);
+            border-left: 5px solid var(--gold);
+        }
+        
+        .result-match {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .result-winner {
+            color: var(--gold);
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+        
+        /* ==== CONTACT SECTION ==== */
+        .contact {
+            background-color: var(--dark-black);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .contact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            opacity: 0.05;
+            z-index: 0;
+        }
+        
+        .contact-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 50px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .contact-info h3 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: var(--text-glow);
+        }
+        
+        .contact-details {
+            margin-bottom: 40px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--red), var(--dark-red));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            color: var(--white);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+        
+        .contact-text {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+        }
+        
+        .contact-text a {
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .contact-text a:hover {
+            color: var(--red);
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-link {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 1.3rem;
+        }
+        
+        .social-link:hover {
+            transform: translateY(-5px);
+            background: linear-gradient(45deg, var(--red), var(--dark-red));
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+        }
+        
+        /* ==== FOOTER ==== */
+        footer {
+            background-color: var(--dark-black);
+            padding: 50px 0 30px;
+            text-align: center;
+            border-top: 1px solid var(--red);
+            position: relative;
+        }
+        
+        .footer-logo {
+            margin-bottom: 30px;
+        }
+        
+        .footer-logo img {
+            height: 60px;
+            width: auto;
+            filter: drop-shadow(0 0 5px rgba(255, 0, 0, 0.7));
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .footer-links a:hover {
+            color: var(--red);
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+        }
+        
+        .copyright {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            margin-top: 30px;
+        }
+        
+        /* ==== SCROLL TO TOP BUTTON ==== */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--red), var(--dark-red));
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 999;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: borderGlow 3s infinite;
+        }
+        
+        .scroll-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .scroll-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.6);
+        }
+        
+        /* ==== RESPONSIVE STYLES ==== */
+        @media (max-width: 1200px) {
+            .hero h1 {
+                font-size: 4rem;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 300px;
+                height: 100vh;
+                background-color: var(--dark-black);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.5s ease;
+                gap: 30px;
+                z-index: 1000;
+                border-left: 1px solid var(--red);
+                box-shadow: -5px 0 30px rgba(0, 0, 0, 0.8);
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-links li {
+                margin-left: 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .section {
+                padding: 80px 0;
+            }
+            
+            .game-modes-grid,
+            .tournament-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+                letter-spacing: 3px;
+            }
+            
+            .hero-btns {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                text-align: center;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .game-modes-grid, .tournament-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero {
+                min-height: 700px;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .result-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Animation -->
+    <div class="loader-wrapper" id="loader">
+        <div class="loader"></div>
+        <div class="loader-text">LOADING KS ESPORTS</div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-top" id="scrollTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Header -->
+    <header id="header">
+        <div class="container header-container">
+            <a href="https://github.com/kunal007k/ksesportsrelease/releases/download/v1/KS.ESPORTS.apk" class="logo">
+                <img src="Download/ksapplogo.jpg" alt="KS Esports Logo">
+            </a>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#screenshots">Screenshots</a></li>
+                <li><a href="#game-modes">Game Modes</a></li>
+                <li><a href="#tournaments">Tournaments</a></li>
+                <li><a href="#results">Results</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1><span class="red-glitch">KS ESPORTS</span></h1>
+            <p>The Ultimate Mobile Gaming Platform for Competitive Free Fire Battles</p>
+            <div class="hero-btns">
+                <a href="https://github.com/kunal007k/ksesportsrelease/releases/download/v1/KS.ESPORTS.apk" class="btn">Download Now</a>
+                <a href="#tournaments" class="btn btn-outline">Join Tournament</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section screenshots" id="screenshots">
+        <div class="container">
+            <h2 class="section-title">In-Game Screenshots</h2>
+            <div class="screenshots-container">
+                <div class="screenshot-item" style="background-image: url('Download/img1.jpg');"></div>
+                <div class="screenshot-item" style="background-image: url('Download/img2.jpg');"></div>
+                <div class="screenshot-item" style="background-image: url('Download/img3.jpg');"></div>
+                <div class="screenshot-item portrait" style="background-image: url('Download/img4.jpg');"></div>
+                <div class="screenshot-item" style="background-image: url('Download/p5.jpg');"></div>
+            </div>
+        </div>
+    </section>
+    <!-- Game Modes Section -->
+    <section class="section game-modes" id="game-modes">
+        <div class="container">
+            <h2 class="section-title">Game Modes</h2>
+            
+            <div class="game-modes-grid">
+                <!-- Free Fire Full Map Card -->
+                <div class="game-mode-card">
+                    <div class="game-mode-image" style="background-image: url('Download/img_5.png');">
+                        <span class="game-mode-badge">Battle Royale</span>
+                    </div>
+                    <div class="game-mode-content">
+                        <h3 class="game-mode-title">Free Fire - Full Map</h3>
+                        <div class="game-mode-type">Multiple Game Modes</div>
+                        <p class="game-mode-desc">Experience the classic battle royale on the full map with different squad configurations. Survive and be the last team standing.</p>
+                        <div class="game-mode-meta">
+                            <span><i class="fas fa-users"></i> Solo, Duo, Squad</span>
+                            <span><i class="fas fa-map"></i> Full Map</span>
+                        </div>
+                        <div class="game-mode-buttons">
+                            <a href="#home" class="mode-btn">Solo</a>
+                            <a href="#home" class="mode-btn">Duo</a>
+                            <a href="#home" class="mode-btn">Squad</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Clash Squad Card -->
+                <div class="game-mode-card">
+                    <div class="game-mode-image" style="background-image: url('Download/img_13.png');">
+                        <span class="game-mode-badge">Fast Action</span>
+                    </div>
+                    <div class="game-mode-content">
+                        <h3 class="game-mode-title">Clash Squad</h3>
+                        <div class="game-mode-type">Team-Based Combat</div>
+                        <p class="game-mode-desc">Fast-paced 4v4 battles with limited resources. Perfect your teamwork and strategy in this intense game mode.</p>
+                        <div class="game-mode-meta">
+                            <span><i class="fas fa-users"></i> 1v1 to 4v4</span>
+                            <span><i class="fas fa-bolt"></i> Quick Matches</span>
+                        </div>
+                        <div class="game-mode-buttons">
+                            <a href="#home" class="mode-btn">1v1</a>
+                            <a href="#home" class="mode-btn">2v2</a>
+                            <a href="#home" class="mode-btn">3v3</a>
+                            <a href="#home" class="mode-btn">4v4</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Lone Wolf Card -->
+                <div class="game-mode-card">
+                    <div class="game-mode-image" style="background-image: url('Download/image.png');">
+                        <span class="game-mode-badge">Solo Challenge</span>
+                    </div>
+                    <div class="game-mode-content">
+                        <h3 class="game-mode-title">Lone Wolf</h3>
+                        <div class="game-mode-type">Individual Skill</div>
+                        <p class="game-mode-desc">Test your individual combat skills in various matchups. Perfect for players who want to prove their personal mastery.</p>
+                        <div class="game-mode-meta">
+                            <span><i class="fas fa-user"></i> Solo Focus</span>
+                            <span><i class="fas fa-trophy"></i> Competitive</span>
+                        </div>
+                        <div class="game-mode-buttons">
+                            <a href="#home" class="mode-btn">1v1</a>
+                            <a href="#home" class="mode-btn">2v2</a>
+                            <a href="#home" class="mode-btn">3v3</a>
+                            <a href="#home" class="mode-btn">4v4</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tournaments Section -->
+    <section class="section tournaments" id="tournaments">
+        <div class="container">
+            <h2 class="section-title">Popular Tournaments</h2>
+            <div class="tournament-cards">
+                <!-- Clash Squad Tournament -->
+                <div class="tournament-card">
+                    <div class="tournament-image" style="background-image: url('Download/img_12.png');">
+                        <span class="tournament-badge">Live</span>
+                    </div>
+                    <div class="tournament-content">
+                        <h3 class="tournament-title">Clash Squad 6v6 Championship</h3>
+                        <div class="tournament-prize">Prize Pool: $1000</div>
+                        <p class="tournament-desc">Team up with 5 friends and dominate the battlefield in this intense 6v6 tournament with special rules and increased rewards.</p>
+                        <div class="tournament-meta">
+                            <span><i class="fas fa-users"></i> 32 Teams</span>
+                            <span><i class="fas fa-calendar-alt"></i> Daily at 8PM</span>
+                        </div>
+                        <a href="#home" class="btn">Join Tournament</a>
+                    </div>
+                </div>
+                
+                <!-- Full Map Tournament -->
+                <div class="tournament-card">
+                    <div class="tournament-image" style="background-image: url('Download/img_5.png');">
+                        <span class="tournament-badge">Upcoming</span>
+                    </div>
+                    <div class="tournament-content">
+                        <h3 class="tournament-title">Full Map Squad Royale</h3>
+                        <div class="tournament-prize">Prize Pool: $1500</div>
+                        <p class="tournament-desc">Classic battle royale tournament with your squad. Last team standing wins the prize pool. Special rules apply for competitive play.</p>
+                        <div class="tournament-meta">
+                            <span><i class="fas fa-users"></i> 50 Teams</span>
+                            <span><i class="fas fa-calendar-alt"></i> Weekends</span>
+                        </div>
+                        <a href="#home" class="btn">Register Now</a>
+                    </div>
+                </div>
+                
+                <!-- Lone Wolf Tournament -->
+                <div class="tournament-card">
+                    <div class="tournament-image" style="background-image: url('Download/image.png');">
+                        <span class="tournament-badge">Ongoing</span>
+                    </div>
+                    <div class="tournament-content">
+                        <h3 class="tournament-title">Lone Wolf 1v1 Showdown</h3>
+                        <div class="tournament-prize">Prize Pool: $500</div>
+                        <p class="tournament-desc">Test your individual skills in this high-stakes 1v1 elimination tournament. Only the best will survive and claim the prize.</p>
+                        <div class="tournament-meta">
+                            <span><i class="fas fa-users"></i> 128 Players</span>
+                            <span><i class="fas fa-calendar-alt"></i> Daily</span>
+                        </div>
+                        <a href="#home" class="btn">Join Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="section results" id="results">
+        <div class="container">
+            <h2 class="section-title">Recent Tournament Results</h2>
+            <div class="results-list">
+                <div class="result-item">
+                    <span class="result-match">Match #142 - Clash Squad 6v6</span>
+                    <span class="result-winner">Winner: DarkKnight Squad ($500)</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-match">Match #137 - Lone Wolf 1v1</span>
+                    <span class="result-winner">Winner: SniperX ($200)</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-match">Match #133 - Full Map Squad</span>
+                    <span class="result-winner">Winner: Team Phoenix ($750)</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-match">Match #128 - Clash Squad 4v4</span>
+                    <span class="result-winner">Winner: GhostRecon ($300)</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-match">Match #121 - Lone Wolf 1v1</span>
+                    <span class="result-winner">Winner: LoneRanger ($150)</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section contact" id="contact">
+        <div class="container">
+            <h2 class="section-title">Contact Us</h2>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Get In Touch</h3>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-text">
+                                <a href="mailto:kunalpatil007k@gmail.com">kunalpatil007k@gmail.com</a>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                <a href="tel:+1234567890">+1 234 567 890</a>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                KS Esports HQ, Gaming Street, Digital City
+                            </div>
+                        </div>
+                    </div>
+                    <h3 style="margin-top: 40px;">Follow Us</h3>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/ks_esports_/profilecard/?igsh=Y2k5dHI1NGhtcG82" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://t.me/ks_esports" class="social-link">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="https://www.youtube.com/@ks_esports_07" class="social-link">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-logo">
+                <a href="#home">
+                    <img src="Download/ksapplogo.jpg" alt="KS Esports Logo">
+                </a>
+            </div>
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#screenshots">Screenshots</a>
+                <a href="#game-modes">Game Modes</a>
+                <a href="#tournaments">Tournaments</a>
+                <a href="#results">Results</a>
+                <a href="#contact">Contact</a>
+                <a href="https://github.com/kunal007k/ksesportsrelease/releases/download/v1/KS.ESPORTS.apk">Download</a>
+            </div>
+            <p class="copyright">© 2023 KS Esports. All Rights Reserved. Android only.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Loading animation
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loader').classList.add('fade-out');
+                setTimeout(function() {
+                    document.getElementById('loader').style.display = 'none';
+                }, 500);
+            }, 1500); // Adjust the time as needed
+        });
+
+        // Mobile menu toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('active');
+            this.classList.toggle('fa-times');
+            this.classList.toggle('fa-bars');
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function() {
+                document.getElementById('navLinks').classList.remove('active');
+                document.getElementById('mobileMenuBtn').classList.remove('fa-times');
+                document.getElementById('mobileMenuBtn').classList.add('fa-bars');
+            });
+        });
+        
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            const scrollTop = document.getElementById('scrollTop');
+            
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            if (window.scrollY > 300) {
+                scrollTop.classList.add('active');
+            } else {
+                scrollTop.classList.remove('active');
+            }
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Scroll to top button
+        document.getElementById('scrollTop').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Animation on scroll
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.game-mode-card, .tournament-card, .result-item, .screenshot-item');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (elementPosition < screenPosition) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        }
+        
+        // Set initial state for animated elements
+        document.querySelectorAll('.game-mode-card, .tournament-card, .result-item, .screenshot-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.5s ease';
+        });
+        
+        // Run animation on load and scroll
+        window.addEventListener('load', animateOnScroll);
+        window.addEventListener('scroll', animateOnScroll);
+
+        // Text glitch effect for hero title
+        const heroTitle = document.querySelector('.hero h1');
+        if (heroTitle) {
+            setInterval(() => {
+                heroTitle.classList.toggle('red-glitch');
+                setTimeout(() => {
+                    heroTitle.classList.toggle('red-glitch');
+                }, 100);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
